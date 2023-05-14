@@ -1,3 +1,7 @@
+
+###personal note, i think this is the one i'm working on
+
+
 # [切换到中文版](./README_zh_cn.md)
 
 # How to use Klipper on SKR-mini-E3-V3.0
