@@ -1,0 +1,52 @@
+from https://www.klipper3d.org/Measuring_Resonances.html
+
+The ADXL345 can be connected to the SPI interface of a Raspberry Pi or MCU board (it needs to be reasonably fast).
+
+
+Wiring¶
+An ethernet cable with shielded twisted pairs (cat5e or better) is recommended for signal integrity over a long distance. If you still experience signal integrity issues (SPI/I2C errors):
+
+Double check the wiring with a digital multimeter for:
+Correct connections when turned off (continuity)
+Correct power and ground voltages
+
+SPI Accelerometers¶
+Suggested twisted pair order for three twisted pairs:
+
+
+GND+MISO
+3.3V+MOSI
+SCLK+CS
+
+ADXL345¶
+DIRECT TO RASPBERRY PI¶
+Note: Many MCUs will work with an ADXL345 in SPI mode (e.g. Pi Pico), wiring and configuration will vary according to your specific board and available pins.
+
+You need to connect ADXL345 to your Raspberry Pi via SPI. Note that the I2C connection, which is suggested by ADXL345 documentation, has too low throughput and will not work. The recommended connection scheme:
+
+ADXL345 pin	RPi pin	RPi pin name
+3V3 (or VCC)	01	3.3V DC power
+GND	06	Ground
+CS	24	GPIO08 (SPI0_CE0_N)
+SDO	21	GPIO09 (SPI0_MISO)
+SDA	19	GPIO10 (SPI0_MOSI)
+SCL	23	GPIO11 (SPI0_SCLK)
+
+
+Note that on a bed slinger printer one must design 2 mounts: one for the toolhead and one for the bed, and run the measurements twice. 
+
+Install additional packages: 
+sudo apt update
+sudo apt install python3-numpy python3-matplotlib libatlas-base-dev
+
+Install NumPY to Klipper env:
+~/klippy-env/bin/pip install -v numpy
+
+Note that, depending on the performance of the CPU, it may take a lot of time, up to 10-20 minutes. Be patient and wait for the completion of the installation. On some occasions, if the board has too little RAM the installation may fail and you will need to enable swap.
+
+Configure with RPI:
+sudo raspi-config
+
+
+
+
