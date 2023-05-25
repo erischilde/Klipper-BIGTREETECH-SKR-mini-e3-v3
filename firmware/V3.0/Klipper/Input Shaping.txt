@@ -22,6 +22,7 @@ ADXL345¶
 DIRECT TO RASPBERRY PI¶
 Note: Many MCUs will work with an ADXL345 in SPI mode (e.g. Pi Pico), wiring and configuration will vary according to your specific board and available pins.
 
+
 You need to connect ADXL345 to your Raspberry Pi via SPI. Note that the I2C connection, which is suggested by ADXL345 documentation, has too low throughput and will not work. The recommended connection scheme:
 
 ADXL345 pin	RPi pin	RPi pin name
@@ -42,11 +43,52 @@ sudo apt install python3-numpy python3-matplotlib libatlas-base-dev
 Install NumPY to Klipper env:
 ~/klippy-env/bin/pip install -v numpy
 
+After, check and follow instructions here: 
+https://www.klipper3d.org/RPi_microcontroller.html
+
 Note that, depending on the performance of the CPU, it may take a lot of time, up to 10-20 minutes. Be patient and wait for the completion of the installation. On some occasions, if the board has too little RAM the installation may fail and you will need to enable swap.
 
 Configure with RPI:
 sudo raspi-config
+- select SPI
+
+Bed slinger (that's you); https://www.klipper3d.org/Measuring_Resonances.html#bed-slinger-printers
+- clip chip onto printhead and run for X axis, then clip to print bed and run again for Y axis
+- can use two if one is connected to MCU board (unsure, the canbus board maybe?)
 
 
+Checking the setup¶
+Now you can test a connection.
+This is in Octoprint
+
+For "non bed-slingers" (e.g. one accelerometer), in Octoprint, enter ACCELEROMETER_QUERY
+For "bed-slingers" (e.g. more than one accelerometer), enter ACCELEROMETER_QUERY CHIP=<chip> where <chip> is the name of the chip as-entered, e.g. CHIP=bed (see: bed-slinger) for all installed accelerometer chips.
+You should see the current measurements from the accelerometer, including the free-fall acceleration, e.g.
+
+
+Recv: // adxl345 values (x, y, z): 470.719200, 941.438400, 9728.196800
+
+Actual Measurement: 
+
+  TEST_RESONANCES AXIS=X
+ 
+
+This will generate 2 CSV files (/tmp/resonances_x_*.csv and /tmp/resonances_y_*.csv). These files can be processed with the stand-alone script on a Raspberry Pi. To do that, run the following commands:
+
+
+~/klipper/scripts/calibrate_shaper.py /tmp/resonances_x_*.csv -o /tmp/shaper_calibrate_x.png
+~/klipper/scripts/calibrate_shaper.py /tmp/resonances_y_*.csv -o /tmp/shaper_calibrate_y.png
+
+
+Shaper Auto Calibration: 
+
+- can run from Octoprint: 
+  SHAPER_CALIBRATE AXIS=Y
+  SHAPER_CALIBRATE AXIS=X
+  
+- after, to save, twice: 
+  SAVE_CONFIG
+
+- SHAPER_CALIBRATE command on it's own will do both axes. If you did connect 2 accels succesfully, it'll do it automatically as well. 
 
 
