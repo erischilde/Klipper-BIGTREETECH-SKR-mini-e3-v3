@@ -1,9 +1,6 @@
 
 ###personal note, i think this is the one i'm working on
 
-
-# [切换到中文版](./README_zh_cn.md)
-
 # How to use Klipper on SKR-mini-E3-V3.0
 
 ## NOTE: 
@@ -62,29 +59,3 @@
     [mcu]
     serial: /dev/serial/by-id/usb-Klipper_stm32g0b1xx_4D003C000B50345033313820-if00
     ```
-5. If you use USART2 to communicate with raspberry pi, you need to modify the following files by inserting the SD card into the computer or by SSH command.
-   * Remove `console=serial0,115200` in `/boot/cmdline.txt`
-   * Add `dtoverlay=pi3-miniuart-bt` at the end of file `/boot/config.txt`
-   * Modify the configuration of `[mcu]` in `printer.cfg` to `serial: /dev/ttyAMA0` and enable `restart_method: command` by SSH
-     ```
-     [mcu]
-     serial: /dev/ttyAMA0
-     restart_method: command
-     ```
-     <img src=Images/cfg_uart.png/><br/>
-
-### BigTreeTech TFT TouchScreen emulated 12864 mode: Set the `display` in `printer.cfg` to the following parameters
-   ```
-   [display]
-   lcd_type: emulated_st7920
-   spi_software_miso_pin: PD8 # status led, Virtual MISO
-   spi_software_mosi_pin: PD6
-   spi_software_sclk_pin: PB9
-   en_pin: PB8
-   encoder_pins: ^PA10, ^PA9
-   click_pin: ^!PA15
-
-   [output_pin beeper]
-   pin: PB5
-   ```
-   <img src=Images/cfg_tft_emulated_12864.png/><br/>
